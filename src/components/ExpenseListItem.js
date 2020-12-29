@@ -20,4 +20,3 @@ export const ExpenseListItem = ({dispatch, id, description, amount, createdAt}) 
 );
 
 export default connect()(ExpenseListItem);
-//export default ExpenseListItem;

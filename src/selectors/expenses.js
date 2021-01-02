@@ -8,6 +8,7 @@ export default (expenses, { text, sortBy, startDate, endDate }) => {
         
         //const description = expense.description.toLowerCase();
         //const textMatch = !text || description.indexOf(text.toLowerCase()) > -1;
+        //console.log('selector', expense[0].description);
         const textMatch = expense.description.toLowerCase().includes(text.toLowerCase());
         return startDateMatch && endDateMatch && textMatch;
     }).sort((a, b) => {

@@ -8,7 +8,8 @@ import {
     removeExpense, 
     setExpenses, 
     startSetExpenses, 
-    startRemoveExpense 
+    startRemoveExpense ,
+    startEditExpense
 } from '../../actions/expenses';
 
 import expenses from '../fixtures/expenses';
@@ -33,31 +34,31 @@ test('should setup remove expense action object', () => {
     })
 });
 
-test('should remove expense from database and store', (done) => {
-    const store = createMockStore({});
-    const expenseData = {
-        description: 'Mouse',
-        amount: 3010,
-        note: 'This one is better',
-        createdAt: 1000
-    };
-    store.dispatch(startAddExpense(expenseData)).then(() => {
-        const actions = store.getActions();
-        //return database.ref(`expenses/${actions[0].expense.id}`).once('value');
-    }).then((snapshot) => {
-        const actions = store.getActions();
-        //console.log("state:", store.getState().expenses);
-        return store.dispatch(startRemoveExpense(actions[0].expense.id));
-    }).then(
-        () => {
-            const state = store.getState();
-            expect(state.expenses).toBe(undefined);
-            done();
-        }
-    ).catch((e)=>{
-        console.log('test error:', e);
-    });
-});
+// test('should remove expense from database and store', (done) => {
+//     const store = createMockStore({});
+//     const expenseData = {
+//         description: 'Mouse',
+//         amount: 3010,
+//         note: 'This one is better',
+//         createdAt: 1000
+//     };
+//     store.dispatch(startAddExpense(expenseData)).then(() => {
+//         const actions = store.getActions();
+//         //return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+//     }).then((snapshot) => {
+//         const actions = store.getActions();
+//         //console.log("state:", store.getState().expenses);
+//         return store.dispatch(startRemoveExpense(actions[0].expense.id));
+//     }).then(
+//         () => {
+//             const state = store.getState();
+//             expect(state.expenses).toBe(undefined);
+//             done();
+//         }
+//     ).catch((e)=>{
+//         console.log('test error:', e);
+//     });
+// });
 
 test(`should remove expense from firebase`, (done) => {
     const store = createMockStore();
@@ -83,6 +84,26 @@ test('should setup edit expense action object', () => {
         id: '123abc',
         updates: {note: 'some note'}
     });
+});
+
+test(`should edit expense from firebase`, (done) => {
+    const store = createMockStore();
+    let id = expenses[0].id;
+    const updates = { amount: 21045 };
+    //expense.description = 'updated note';
+
+    store.dispatch(startEditExpense(id, updates)).then(()=>{
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'EDIT_EXPENSE',
+            id,
+            updates
+        });
+        return database.ref(`expenses/${id}`).once('value');
+    }).then((snapshot)=>{
+        expect(snapshot.val().amount).toBe(updates.amount);
+        done();
+    });;
 });
 
 test('should setup add expense action object with provided values', () => {

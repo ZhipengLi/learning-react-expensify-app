@@ -63,6 +63,18 @@ export const editExpense = (id, updates) =>({
     id,
     updates
 });
+export const startEditExpense = (id, updates) => {
+    return (dispatch) => {
+        return database.ref(`expenses/${id}`).update(updates).then(
+            ()=> {
+                //console.log('after expense is pushed to store', ref.key);
+                dispatch(editExpense(id, updates));
+            }
+        ).catch((e)=>{
+            console.log('database error', e);
+        });
+    };
+};
 
 // SET_EXPENSES
 export const setExpenses = (expenses) => ({

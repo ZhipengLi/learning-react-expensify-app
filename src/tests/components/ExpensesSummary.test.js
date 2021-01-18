@@ -10,7 +10,7 @@ test(`should return 2 expenses`, () => {
     const count = exp.length, total = SelectExpensesTotal(exp);//numeral(SelectExpensesTotal(exp)/100).format('$0, 0.00');
     console.log('total:', total);
     const wrapper = shallow(<ExpensesSummary expensesCount={count} expensesTotal={total} />);
-    expect(wrapper.find('div').html()).toContain(`Viewing ${count} expenses totaling ${numeral(total/100).format('$0, 0.00')}`);
+    expect(wrapper.find('h1').html()).toContain(`Viewing <span>${count}</span> expenses totaling <span>${numeral(total/100).format('$0, 0.00')}</span>`);
 });
 
 test(`should return 1 expenses`, () => {
@@ -18,5 +18,5 @@ test(`should return 1 expenses`, () => {
     const count = exp.length, total = SelectExpensesTotal(exp);//numeral(SelectExpensesTotal(exp)/100).format('$0, 0.00');
     console.log('total:', total);
     const wrapper = shallow(<ExpensesSummary expensesCount={count} expensesTotal={total} />);
-    expect(wrapper.find('div').html()).toContain(`Viewing ${count} expense totaling ${numeral(total/100).format('$0, 0.00')}`);
+    expect(wrapper.find('h1').html()).toContain(`Viewing <span>${count}</span> expense totaling <span>${numeral(total/100).format('$0, 0.00')}</span>`);
 });
